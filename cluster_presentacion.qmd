@@ -1,0 +1,102 @@
+---
+title: "Relación entre los indicadores sociales, económicos y ambientales alrededor del mundo"
+title-slide-attributes:
+  data-background-image: imagentitulo.jpg
+  data-background-size: contain
+  data-background-opacity: "0.7"
+author:
+  - Frank William Hammond Espinosa
+  - Maria del Mar Deyà Torrens
+  - Toni Fuentes Bauzà
+format: 
+  revealjs:
+    transition: convex
+    background-transition: fade
+editor: source
+---
+
+## Resumen de nuestra base de datos
+
+El objetivo de nuestro estudio es encontrar relaciones entre los indicadores sociales, econónimos y ambientales de los diferentes países de nuestro planeta. Concretamente, creemos interesante estudiar:
+
+-   La relación entre HDI y producción de $CO_2$.
+
+-   La relación entre GNIPC y esperanza de vida.
+
+-   La relación entre $CO_2$ y esperanza de vida.
+
+Adicionalmente, sospechamos que existirán diferencias significativas entre las distintas variables cuantitativas por continente.
+
+
+## Comparación de las variables respecto a los continentes
+
+```{r, echo = FALSE, results=FALSE}
+library(tidyverse)
+db = read.csv("dataset_tidy.csv") 
+db <- db %>% 
+  mutate(HDI_level = factor(HDI_level, ordered = T, 
+                            levels = c("Low", "Medium", "High", "Very High")), 
+         Continent = factor(Continent))
+```
+
+```{r, echo = FALSE}
+library(fmsb)
+library(tidyverse)
+
+layout(matrix(c(1,1,2, 2,3, 3, 4,4,4, 5,5,5), nrow = 2, byrow = TRUE))
+
+db %>% 
+  select(Continent,HDI) %>% 
+  group_by(Continent) %>% 
+  summarise(mean_HDI=mean(HDI, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = Continent, values_from = mean_HDI) %>% 
+  rbind(rep(1,5), rep(0.3,5),.) %>% 
+  radarchart(title = "Media del HDI", cglty = 1, cglcol = "gray",
+           pcol = 4, plwd = 2,
+           pfcol = rgb(0, 0.4, 1, 0.25), vlcex = 0.8)
+
+db %>% 
+  select(Continent,CO2_prod) %>% 
+  group_by(Continent) %>% 
+  summarise(mean_CO2=mean(CO2_prod, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = Continent, values_from = mean_CO2) %>% 
+  rbind(rep(10,5), rep(0,5),.) %>% 
+  radarchart(title = "Media de la producción de CO2", cglty = 1, cglcol = "grey",
+           pcol = 2, plwd = 2,
+           pfcol = rgb(1, 0, 0, 0.25), vlcex = 0.8)
+
+db %>% 
+  select(Continent,GNIPC) %>% 
+  group_by(Continent) %>% 
+  summarise(mean_GNIPC=mean(GNIPC, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = Continent, values_from = mean_GNIPC) %>% 
+  rbind(rep(50000,5), rep(0,5),.) %>% 
+  radarchart(title = "Media del PIB", cglty = 1, cglcol = "grey",
+           pcol = 3, plwd = 2,
+           pfcol = rgb(0.4, 1, 0, 0.25), vlcex = 0.8)
+
+db %>% 
+  select(Continent,Life_expect) %>% 
+  group_by(Continent) %>% 
+  summarise(mean_Life=mean(Life_expect, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = Continent, values_from = mean_Life) %>% 
+  rbind(rep(90,5), rep(60,5),.) %>% 
+  radarchart(title = "Media de la esperanza de vida", cglty = 1, cglcol = "grey",
+           pcol = 7, plwd = 2,
+           pfcol = rgb(1, 1, 0, 0.25), vlcex = 0.8)
+
+
+db %>% 
+  select(Continent,Population) %>% 
+  group_by(Continent) %>% 
+  summarise(mean_Population=mean(Population, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = Continent, values_from = mean_Population) %>% 
+  rbind(rep(150000000,5), rep(1000,5),.) %>% 
+  radarchart(title = "Media de la Población", cglty = 1, cglcol = "grey",
+           pcol = 14, plwd = 2,
+           pfcol = rgb(1, 0, 1, 0.25), vlcex = 0.8)
+
+
+```
+
+
