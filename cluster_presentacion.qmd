@@ -100,3 +100,25 @@ db %>%
 ```
 
 
+## Agrupamiento (Clustering)
+
+
+```{r}
+rownames(db) <- db$Country 
+db_cuant <- db %>% select(HDI, CO2_prod, GNIPC, Life_expect, Population) %>% na.omit()
+datos <- scale(db_cuant)  #escalar las variables
+mat_dist <- dist(datos, method = "euclidian")  # Distancia euclidíana
+round(as.matrix(mat_dist)[1:5, 1:5], 2)
+```
+
+```{r}
+# DIstancia basada en la correlación de Pearson
+library(factoextra)
+mat_dist <- get_dist(datos, method = "pearson") 
+round(as.matrix(mat_dist)[1:5, 1:5], 2)
+```
+```{r}
+fviz_dist(dist.obj = mat_dist, lab_size = 1) +
+  theme(legend.position = "none")
+```
+
