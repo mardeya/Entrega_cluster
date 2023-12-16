@@ -122,3 +122,12 @@ fviz_dist(dist.obj = mat_dist, lab_size = 1) +
   theme(legend.position = "none")
 ```
 
+## K-mitjanes clustering
+
+```{r}
+set.seed(101)
+km_clusters <- kmeans(datos, centers = 4, nstart = 50)
+
+plot(datos, col = km_clusters$cluster, pch = 1)
+```
+
