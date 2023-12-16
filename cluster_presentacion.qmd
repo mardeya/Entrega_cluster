@@ -100,7 +100,7 @@ db %>%
 ```
 
 
-## Agrupamiento (Clustering)
+## Matriz de distancias
 
 
 ```{r}
