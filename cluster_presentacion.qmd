@@ -100,3 +100,25 @@ fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid"
   theme_bw() + 
   theme(legend.position = "none")
 ```
+
+
+
+## Dendograma
+
+```{r}
+hc_complete <- hclust(d = mat_dist, method = "complete")
+hc_average <- hclust(d = mat_dist, method = "average")
+cor(x = mat_dist, cophenetic(hc_complete))
+cor(x = mat_dist, cophenetic(hc_average))
+```
+
+En este caso, el método \textit{linkage average} representa mejor la similitud entre obervaciones.
+
+```{r}
+hc_completo <- db_cuant %>%  scale() %>%  dist(method = "euclidean") %>%  hclust(method = "complete")
+
+fviz_dend(x= hc_completo, k = 4, cex = 0.6) + 
+  geom_line(yintercept = 5.5, linetype = "dashed")
+```
+
+
