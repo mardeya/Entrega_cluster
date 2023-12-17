@@ -350,18 +350,23 @@ Toni Fuentes Bauzà
 </section>
 <section id="resumen-de-nuestra-base-de-datos" class="slide level2">
 <h2>Resumen de nuestra base de datos</h2>
-<p>El objetivo de nuestro estudio es encontrar relaciones entre los indicadores sociales, econónimos y ambientales de los diferentes países de nuestro planeta. Concretamente, creemos interesante estudiar:</p>
-<ul>
-<li><p>La relación entre HDI y producción de <span class="math inline">\(CO_2\)</span>.</p></li>
-<li><p>La relación entre GNIPC y esperanza de vida.</p></li>
-<li><p>La relación entre <span class="math inline">\(CO_2\)</span> y esperanza de vida.</p></li>
-</ul>
-<p>Adicionalmente, sospechamos que existirán diferencias significativas entre las distintas variables cuantitativas por continente.</p>
-</section>
-<section id="comparación-de-las-variables-respecto-a-los-continentes" class="slide level2">
-<h2>Comparación de las variables respecto a los continentes</h2>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<section id="resumen-de-nuestra-base-de-datos-1" class="slide level2">
+<h2>Resumen de nuestra base de datos</h2>
+
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"><p>Tiene sentido que queden todos pa un lao pq tienen correlaciones positivas:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                    HDI    CO2_prod       GNIPC Life_expect   Population
+HDI          1.00000000 0.547878460  0.78733738 0.905749235 -0.017826662
+CO2_prod     0.54787846 1.000000000  0.57805431 0.457364600  0.005138611
+GNIPC        0.78733738 0.578054315  1.00000000 0.732849033 -0.041735536
+Life_expect  0.90574924 0.457364600  0.73284903 1.000000000  0.004751664
+Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code></pre>
+</div>
+</div>
+</section>
 <section id="matriz-de-distancias" class="slide level2">
 <h2>Matriz de distancias</h2>
 <div class="cell">
@@ -385,11 +390,11 @@ United Arab Emirates        1.48   1.47    1.20    0.39                 0.00</co
 </div>
 </div>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
 <section id="k-mitjanes-clustering" class="slide level2">
 <h2>K-mitjanes clustering</h2>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><div class="footer footer-default">
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><div class="footer footer-default">
 
 </div>
 </section>
