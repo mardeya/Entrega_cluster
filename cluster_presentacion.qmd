@@ -68,6 +68,13 @@ fviz_dist(dist.obj = mat_dist, lab_size = 1) +
   theme(legend.position = "none")
 ```
 
+## Valor óptimo de números de clusters
+
+```{r}
+fviz_nbclust(datos, FUNcluster = kmeans, method ="wss", diss = dist(datos, method = "euclidian"))
+```
+
+
 ## K-mitjanes clustering
 
 ```{r}
