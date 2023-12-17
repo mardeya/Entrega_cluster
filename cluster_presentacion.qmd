@@ -40,7 +40,7 @@ qual.acp %>% fviz_eig(addlabels=TRUE, ylim=c(0,100))
 ```{r}
 qual.acp %>% fviz_pca_var(col.var="contrib", gradient.cols=c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)
 ```
-Tiene sentido que queden todos pa un lao pq tienen correlaciones positivas:
+Tiene sentido ya que todas las variables tienen correlaciones positivas entre ellas excepto con la variable Población:
 ```{r}
 qual %>% cor() 
 ```
