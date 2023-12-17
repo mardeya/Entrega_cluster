@@ -59,9 +59,9 @@ round(as.matrix(mat_dist)[1:5, 1:5], 2)
 
 ```{r}
 # DIstancia basada en la correlación de Pearson
-library(factoextra)
-mat_dist <- get_dist(datos, method = "pearson") 
-round(as.matrix(mat_dist)[1:5, 1:5], 2)
+#library(factoextra)
+#mat_dist <- get_dist(datos, method = "pearson") 
+#round(as.matrix(mat_dist)[1:5, 1:5], 2)
 ```
 ```{r}
 fviz_dist(dist.obj = mat_dist, lab_size = 1) +
@@ -88,8 +88,15 @@ plot(datos, col = km_clusters$cluster, pch = 1)
 
 
 ```{r}
-fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE) + 
+fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE, geom = "point") + 
   theme_bw() + 
   theme(legend.position = "none")
 ```
 
+## K-mitjanes clustering
+
+```{r}
+fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE) + 
+  theme_bw() + 
+  theme(legend.position = "none")
+```
