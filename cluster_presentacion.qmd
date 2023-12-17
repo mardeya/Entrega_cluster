@@ -79,8 +79,17 @@ fviz_nbclust(datos, FUNcluster = kmeans, method ="wss", diss = dist(datos, metho
 
 ```{r}
 set.seed(101)
-km_clusters <- kmeans(datos, centers = 4, nstart = 50)
+km_clusters <- kmeans(datos, centers = 4, nstart = 25)
 
 plot(datos, col = km_clusters$cluster, pch = 1)
+```
+
+## K-mitjanes clustering
+
+
+```{r}
+fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE) + 
+  theme_bw() + 
+  theme(legend.position = "none")
 ```
 
