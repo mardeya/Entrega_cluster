@@ -3,6 +3,11 @@ library(leaflet)
 library(tidyverse)
 
 
+# Pes clustering de k-mitjanes posar
+#   generate_map(km$cluster)
+# Pes clustering jerarquitzat posar
+#   generate_map(cutree(hc, k=4))
+
 generate_map <- function (cluster) {
   world_map <- map_data("world")
 
