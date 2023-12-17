@@ -1,5 +1,6 @@
 library(tidyverse)
 library(factoextra)
+library(leaflet)
 
 db = read.csv("dataset_tidy.csv")
 db <- db %>%
@@ -16,30 +17,11 @@ mat_dist <- dist(datos, method = "euclidian")  # Distancia euclidíana
 round(as.matrix(mat_dist)[1:5, 1:5], 2)
 
 
-qual <- db %>% select(6:10) %>%  drop_na
-qual %>% glimpse
-qual.acp <- prcomp(qual, scale=TRUE)
-qual.acp %>% fviz_eig(addlabels=TRUE, ylim=c(0,100))
-
-
-hc_complete <- hclust(d = mat_dist, method = "complete")
-hc_average <- hclust(d = mat_dist, method = "average")
-cor(x = mat_dist, cophenetic(hc_complete))
-cor(x = mat_dist, cophenetic(hc_average))
-
-
-hc_completo <- db_cuant %>%  scale() %>%  dist(method = "euclidean") %>%  hclust(method = "complete")
-
 set.seed(101)
 km_clusters <- kmeans(datos, centers = 4, nstart = 25)
 
 
-library(leaflet)
-
-
 world_map <- map_data("world")
-
-km_clusters_map <- left_join(km_clusters$cluster, world_map, by = "region")
 
 world_map <- world_map %>%
   mutate(region = ifelse(region == "USA", "United States", region)) %>%
@@ -61,7 +43,7 @@ world_map <- world_map %>%
   mutate(region = ifelse(region == "Iran", "Iran (Islamic Republic of)", region)) %>%
   mutate(region = ifelse(region == "Bolivia", "Bolivia (Plurinational State of)", region))
 
-mypalette <- colorNumeric( palette="viridis", domain=km_clusters$cluster[region], na.color="red")
+mypalette <- colorNumeric( palette="viridis", domain=km_clusters$cluster[world_map$region], na.color="red")
 
 world_map %>% ggplot(aes(x = long, y = lat)) +
   geom_polygon(aes( group = group, fill = mypalette(km_clusters$cluster[region])))+
