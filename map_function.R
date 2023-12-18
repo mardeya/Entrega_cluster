@@ -33,6 +33,7 @@ generate_map <- function (cluster) {
 
   w <- world_map %>% ggplot(aes(x = long, y = lat)) +
     geom_polygon(aes(group = group, fill = as.factor(cluster[region]))) +
+    theme_void() +
     theme(legend.position = "none")
 
   return(w)

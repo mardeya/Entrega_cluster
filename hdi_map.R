@@ -2,23 +2,12 @@ library(tidyverse)
 library(factoextra)
 library(leaflet)
 
-db = read.csv("dataset_tidy.csv")
+
+db <- read.csv("dataset_tidy.csv")
 db <- db %>%
   mutate(HDI_level = factor(HDI_level, ordered = T,
                             levels = c("Low", "Medium", "High", "Very High")),
          Continent = factor(Continent))
-db %>% glimpse
-
-
-rownames(db) <- db$Country
-db_cuant <- db %>% select(HDI, CO2_prod, GNIPC, Life_expect, Population) %>% na.omit()
-datos <- scale(db_cuant)  #escalar las variables
-mat_dist <- dist(datos, method = "euclidian")  # Distancia euclidíana
-round(as.matrix(mat_dist)[1:5, 1:5], 2)
-
-
-set.seed(101)
-km_clusters <- kmeans(datos, centers = 4, nstart = 25)
 
 
 world_map <- map_data("world")
@@ -43,12 +32,15 @@ world_map <- world_map %>%
   mutate(region = ifelse(region == "Iran", "Iran (Islamic Republic of)", region)) %>%
   mutate(region = ifelse(region == "Bolivia", "Bolivia (Plurinational State of)", region))
 
-mypalette <- colorNumeric( palette="viridis", domain=km_clusters$cluster[world_map$region], na.color="red")
+# db$region <- db$Country
+# hdi_df <- left_join(world_map, db, by="region")
+
+hdi <- db$HDI_level
+names(hdi) <- db$Country
 
 world_map %>% ggplot(aes(x = long, y = lat)) +
-  geom_polygon(aes( group = group, fill = as.factor(km_clusters$cluster[region])))+
+  geom_polygon(aes( group = group, fill = db[region,])+
   # geom_text(aes(label = region), data = region.lab.data,  size = 3, hjust = 0.5)+
   theme_void()+
   theme(legend.position = "none")+
-  labs(fill=as.factor(km_clusters$cluster[world_map$region]))+
   theme(legend.position = "right")
