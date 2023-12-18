@@ -15,110 +15,185 @@ format:
 editor: source
 ---
 
-## Resumen de nuestra base de datos
+Recordemos que los datos cuantitativos de nuestro dataframe son medidas, tomadas en el 2021, del desarrollo y contaminación de la mayoría de países del mundo, así como de su población.
 
+Repositorio: https://github.com/mardeya/Entrega_cluster
+
+![](imagen2.jpg){width="30%"}
+
+## Análisis de Componentes Principales
+Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares.
 
 ```{r, echo = FALSE, results=FALSE}
 library(tidyverse)
 library(factoextra)
-
+library(ggpubr)
 db = read.csv("dataset_tidy.csv") 
 db <- db %>% 
   mutate(HDI_level = factor(HDI_level, ordered = T, 
                             levels = c("Low", "Medium", "High", "Very High")), 
          Continent = factor(Continent))
-db %>% glimpse
-
-
-qual <- db %>% select(6:10) %>%  drop_na 
-qual %>% glimpse
-qual.acp <- prcomp(qual, scale=TRUE)
+qual <- db %>% select(6:10) %>%  drop_na %>% scale
+qual.acp <- prcomp(qual)
 qual.acp %>% fviz_eig(addlabels=TRUE, ylim=c(0,100))
 ```
+Observamos que con dos variables representamos un 80% de la varianza total. Realizaremos, pues, un ACP de dos componentes. Veamos cómo quedan representadas nuestras variables. 
 
-## Resumen de nuestra base de datos
+## Análisis de Componentes Principales
 ```{r}
 qual.acp %>% fviz_pca_var(col.var="contrib", gradient.cols=c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)
 ```
-Tiene sentido ya que todas las variables tienen correlaciones positivas entre ellas excepto con la variable Población:
+
+## Análisis de Componentes Principales
+Tiene sentido que queden así ya que todas las variables tienen correlaciones positivas entre ellas excepto con la variable Población, que es muy disinta:
 ```{r}
-qual %>% cor() 
+qual %>% cor()
+```
+Veamos qué tan buena es la representación:
+
+## Análisis de componentes principales
+
+```{r}
+getpca <- qual.acp %>% get_pca_var()
+qual.acp %>% fviz_cos2(choice="var",axes=1:2)
+```
+Todas las variables quedan bien representadas, salvo quizás la producción de $CO_2$, pero tampoco llega a ser mala su representación. 
+
+
+## Análisis de Componentes Principales
+Finalmente, grafiquemos nuestro ACP:
+
+```{r}
+fviz_pca_biplot(qual.acp, repel = TRUE,
+                col.var = "#2E9FDF", # color para las variables
+                col.ind = "#696969"  # color para las observaciones
+                )
 ```
 
 
-## Matriz de distancias
+Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación)
+.Son los números 79 y 33.
 
+## Clustering
+En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 4, como indica el siguiente gráfico:
 
 ```{r}
-rownames(db) <- db$Country 
-db_cuant <- db %>% select(HDI, CO2_prod, GNIPC, Life_expect, Population) %>% na.omit()
-datos <- scale(db_cuant)  #escalar las variables
-mat_dist <- dist(datos, method = "euclidian")  # Distancia euclidíana
-round(as.matrix(mat_dist)[1:5, 1:5], 2)
+fviz_nbclust(qual, FUNcluster = kmeans, method ="wss", diss = dist(qual, method = "euclidian"))
 ```
 
-```{r}
-# DIstancia basada en la correlación de Pearson
-#library(factoextra)
-#mat_dist <- get_dist(datos, method = "pearson") 
-#round(as.matrix(mat_dist)[1:5, 1:5], 2)
-```
-```{r}
-fviz_dist(dist.obj = mat_dist, lab_size = 1) +
-  theme(legend.position = "none")
-```
+Por simplicidad, utilizaremos 4 clusters en lo que resta de análisis.
 
-## Valor óptimo de números de clusters
-
-```{r}
-fviz_nbclust(datos, FUNcluster = kmeans, method ="wss", diss = dist(datos, method = "euclidian"))
-```
-
-
-## K-mitjanes clustering
-
-```{r}
+## K-medias clustering
+Realizaremos primero un clustering K-means:
+```{r,warnings=FALSE}
 set.seed(101)
-km_clusters <- kmeans(datos, centers = 4, nstart = 25)
+km_clusters <- kmeans(qual, centers = 4, nstart = 25)
 
-plot(datos, col = km_clusters$cluster, pch = 1)
-```
-
-## K-mitjanes clustering
-
-
-```{r}
-fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE, geom = "point") + 
+fviz_cluster(km_clusters, qual, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE, geom = "point") + 
   theme_bw() + 
   theme(legend.position = "none")
 ```
 
-## K-mitjanes clustering
-
-```{r}
-fviz_cluster(km_clusters, datos, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE) + 
-  theme_bw() + 
-  theme(legend.position = "none")
-```
-
-
+Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1. Veamos otros tipos de clustering:
 
 ## Dendograma
 
-```{r}
+```{r, results= FALSE}
+mat_dist <- dist(qual, method = "euclidian")  # Distancia euclidíana
+
 hc_complete <- hclust(d = mat_dist, method = "complete")
 hc_average <- hclust(d = mat_dist, method = "average")
+hc_ward <- hclust(d = mat_dist, method = "ward.D")
 cor(x = mat_dist, cophenetic(hc_complete))
 cor(x = mat_dist, cophenetic(hc_average))
+cor(x = mat_dist, cophenetic(hc_ward))
 ```
 
-En este caso, el método \textit{linkage average} representa mejor la similitud entre obervaciones.
+En este caso, el método \textit{linkage average} representa mejor la similitud entre observaciones.
+```{r}
+hc_completo <- qual %>%  dist(method = "euclidean") %>%  hclust(method = "complete")
+
+dend_complete <- fviz_dend(x= hc_complete, k = 4, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage completo",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5, linetype="dashed")
+dend_average <- fviz_dend(x= hc_average, k = 4, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage medias",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5,linetype="dashed")
+dend_ward <- fviz_dend(x= hc_ward, k = 4, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage ward",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5,linetype="dashed")
+layout(matrix(c(1,2,3), nrow = 1, byrow = TRUE))
+dend_average 
+```
+## Dendogramas
 
 ```{r}
-hc_completo <- db_cuant %>%  scale() %>%  dist(method = "euclidean") %>%  hclust(method = "complete")
-
-fviz_dend(x= hc_completo, k = 4, cex = 0.6) + 
-  geom_line(yintercept = 5.5, linetype = "dashed")
+dend_complete
 ```
 
+## Dendogramas
 
+```{r}
+dend_ward
+```
+
+## Conclusiones de los dendogramas
+
+- En los tipos $average$ y $complete$, China y la India quedan en un cluster separado.
+- En el cluser $ward$ quedan cuatro clusters bien diferenciados con, más o menos, el mismo número de países.
+
+## Visualización de clusterizados
+
+Finalmente, visualizaremos los diferentes tipos de clusters realizados mediante un mapa mundi. En todos los mapas, los resultados marcados en gris se tratan de países que tenían algún
+valor registrado como NA.
+
+```{r}
+# Utilizaremos la siguiente funcion.
+generate_map <- function (cluster) {
+  world_map <- map_data("world")
+
+  world_map <- world_map %>%
+    mutate(region = ifelse(region == "USA", "United States", region)) %>%
+    mutate(region = ifelse(region == "UK", "United Kingdom", region)) %>%
+    mutate(region = ifelse(region == "Russia", "Russian Federation", region)) %>%
+    mutate(region = ifelse(region == "Tanzania", "Tanzania (United Republic of)", region)) %>%
+    mutate(region = ifelse(region == "Saint Vincent", "Saint Vincent and the Grenadines", region)) %>%
+    mutate(region = ifelse(region == "Venezuela", "Venezuela (Bolivarian Republic of)", region)) %>%
+    mutate(region = ifelse(region == "Vietnam", "Viet Nam", region)) %>%
+    mutate(region = ifelse(region == "Swaziland", "Eswatini (Kingdom of)", region)) %>%  # quin nom és aquest
+    mutate(region = ifelse(region == "Syria", "Syrian Arab Republic", region)) %>%
+    mutate(region = ifelse(region == "Moldova", "Moldova (Republic of)", region)) %>%
+    mutate(region = ifelse(region == "Laos", "Lao People's Democratic Republic", region)) %>%
+    mutate(region = ifelse(region == "Democratic Republic of the Congo", "Congo (Democratic Republic of the)", region)) %>%
+    mutate(region = ifelse(region == "Republic of Congo", "Congo", region)) %>%
+    mutate(region = ifelse(region == "Ivory Coast", "Cote d'Ivoire", region)) %>%
+    mutate(region = ifelse(region == "Czech Republic", "Czechia", region)) %>%
+    mutate(region = ifelse(region == "Somalia", "Somalya", region)) %>%
+    mutate(region = ifelse(region == "Iran", "Iran (Islamic Republic of)", region)) %>%
+    mutate(region = ifelse(region == "Bolivia", "Bolivia (Plurinational State of)", region))
+
+  w <- world_map %>% ggplot(aes(x = long, y = lat)) +
+    geom_polygon(aes(group = group, fill = as.factor(cluster[region]))) +
+    theme_void()+
+    theme(legend.position = "none")
+    
+  return(w)
+}
+
+# Pes clustering de k-mitjanes posar
+#   generate_map(km$cluster)
+# Pes clustering jerarquitzat posar
+#   generate_map(cutree(hc, k=5))
+
+#generate_map(cutree(hc_complete,k=4))
+
+```
+## Mapa con el cluster completo k = 4
+
+![](km_cluster_k4.png){width="50%"}
+
+## Mapa con el cluster completo k = 5
+
+![](hc_complete_k5.png){width="50%"}
+
+
+## Mapa respecto a la variable HDI
+
+![](hdi_graph.png){width="50%"}
+
+Notemos como los gráficos anteriores se parecen mucho al mapa respecto a la variable HDI level.
+Parece que el cluster realizado es significativo.
