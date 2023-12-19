@@ -33,6 +33,7 @@
     }
   </style>
   <link rel="stylesheet" href="cluster_presentacion_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="style.css">
   <link href="cluster_presentacion_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="cluster_presentacion_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="cluster_presentacion_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -348,14 +349,12 @@ Toni Fuentes Bauzà
 </div>
 
 </section>
-<section id="resumen-del-problema" class="slide level2">
+<section id="resumen-del-problema" class="slide level2 center">
 <h2>Resumen del problema</h2>
-<p>Recordemos que los datos cuantitativos de nuestro dataframe son medidas, tomadas en el 2021, del desarrollo y contaminación de la mayoría de países del mundo, así como de su población.</p>
-<div style="text-align:center;">
-<p><img data-src="imagen2.jpg" style="width:50.0%"></p>
-</div>
-</section>
-<section id="recordatorio-de-las-variables" class="slide level2">
+<p>Los datos cuantitativos de nuestro dataframe son medidas, tomadas en el 2021, del desarrollo y contaminación de la mayoría de países del mundo, así como de su población. Nuestro objetivo era encontrar relaciones entre los indicadores sociales, econónimos y ambientales de los diferentes países de nuestro planeta.</p>
+
+<img data-src="imagen2.jpg" style="width:60.0%" class="r-stretch quarto-figure-center"></section>
+<section id="recordatorio-de-las-variables" class="slide level2 center">
 <h2>Recordatorio de las variables</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -378,7 +377,7 @@ Toni Fuentes Bauzà
 <li>5 variables cuantitativas: <em>HDI</em>, <em>CO2_prod</em>, <em>GNIPC</em>, <em>Life_expect</em>, <em>Population</em>.</li>
 </ul>
 </section>
-<section id="a-qué-conclusiones-llegamos" class="slide level2">
+<section id="a-qué-conclusiones-llegamos" class="slide level2 center">
 <h2>¿A qué conclusiones llegamos?</h2>
 <ul>
 <li>Diferencias entre distintos continentes.</li>
@@ -386,17 +385,17 @@ Toni Fuentes Bauzà
 <li>Cierta asociación positiva pero correlación baja entre <em>CO2_prod</em> y <em>Life_expect</em>.</li>
 </ul>
 </section>
-<section id="análisis-de-componentes-principales" class="slide level2">
+<section id="análisis-de-componentes-principales" class="slide level2 center">
 <h2>Análisis de Componentes Principales</h2>
 <p>Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares.</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
-<section id="análisis-de-componentes-principales-1" class="slide level2">
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<section id="análisis-de-componentes-principales-1" class="slide level2 center">
 <h2>Análisis de Componentes Principales</h2>
 <p>Observamos que con dos variables representamos un 80% de la varianza total. Realizaremos, pues, un ACP de dos componentes.</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
-<section id="análisis-de-componentes-principales-2" class="slide level2">
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
+<section id="análisis-de-componentes-principales-2" class="slide level2 center">
 <h2>Análisis de Componentes Principales</h2>
 <p>Tiene sentido que queden así ya que todas las variables tienen correlaciones positivas entre ellas excepto con la variable Población, que es muy disinta:</p>
 <div class="cell">
@@ -410,73 +409,71 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 </div>
 </div>
 </section>
-<section id="análisis-de-componentes-principales-3" class="slide level2">
+<section id="análisis-de-componentes-principales-3" class="slide level2 center">
 <h2>Análisis de componentes principales</h2>
 <p>Veamos qué tan buena es la representación:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"><p>Todas las variables quedan bien representadas, salvo quizás la producción de <span class="math inline">\(CO_2\)</span>, pero tampoco llega a ser mala su representación.</p>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><p>Todas las variables quedan bien representadas, salvo quizás la producción de <span class="math inline">\(CO_2\)</span>, pero tampoco llega a ser mala su representación.</p>
 </section>
-<section id="análisis-de-componentes-principales-4" class="slide level2">
+<section id="análisis-de-componentes-principales-4" class="slide level2 center">
 <h2>Análisis de Componentes Principales</h2>
 <p>Finalmente, grafiquemos nuestro ACP:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><p>Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación). Son los números 79 y 33.</p>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><p>Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación). Son los números 79 y 33.</p>
 </section>
-<section id="clustering" class="slide level2">
+<section id="mapa-respecto-a-la-variable-nivel_hdi" class="slide level2 center">
+<h2>Mapa respecto a la variable nivel_HDI</h2>
+
+<img data-src="hdi_graph.png" style="width:50.0%" class="r-stretch"></section>
+<section id="clustering" class="slide level2 center">
 <h2>Clustering</h2>
 <p>En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 3, como indica el siguiente gráfico:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
-<section id="k-medias-clustering" class="slide level2">
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
+<section id="k-medias-clustering" class="slide level2 center">
 <h2>K-medias clustering</h2>
 <p>Realizaremos primero un clustering K-means:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
-<section id="k-medias-clustering-1" class="slide level2">
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
+<section id="k-medias-clustering-1" class="slide level2 center">
 <h2>K-medias clustering</h2>
 <p>Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1.</p>
 </section>
-<section id="k-medoid-clustering" class="slide level2">
+<section id="k-medoid-clustering" class="slide level2 center">
 <h2>K-medoid clustering</h2>
-<p>Utilizaremos 3 clusters.</p>
+<p>Utilizaremos 3 clusters con la distancia de Manhattan.</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
-<section id="dendogramas" class="slide level2">
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<section id="dendogramas" class="slide level2 center">
 <h2>Dendogramas</h2>
-<p>En este caso, el método representa mejor la similitud entre observaciones.</p>
-
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
-<section id="dendogramas-1" class="slide level2">
-<h2>Dendogramas</h2>
+<p>En este caso, el método linkage average representa mejor la similitud entre observaciones.</p>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
-<section id="dendogramas-2" class="slide level2">
+<section id="dendogramas-1" class="slide level2 center">
 <h2>Dendogramas</h2>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
-<section id="conclusiones-de-los-dendogramas" class="slide level2">
+<section id="dendogramas-2" class="slide level2 center">
+<h2>Dendogramas</h2>
+
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<section id="conclusiones-de-los-dendogramas" class="slide level2 center">
 <h2>Conclusiones de los dendogramas</h2>
 <ul>
 <li>En los tipos <span class="math inline">\(average\)</span> y <span class="math inline">\(complete\)</span>, China y la India quedan en un cluster separado.</li>
 <li>En el cluser <span class="math inline">\(ward\)</span> quedan cuatro clusters bien diferenciados con, más o menos, el mismo número de países.</li>
 </ul>
 </section>
-<section id="visualización-de-clusterizados" class="slide level2">
+<section id="visualización-de-clusterizados" class="slide level2 center">
 <h2>Visualización de clusterizados</h2>
 <p>Finalmente, visualizaremos los diferentes tipos de clusters realizados mediante un mapa mundi. En todos los mapas, los resultados marcados en gris se tratan de países que tenían algún valor registrado como NA.</p>
 </section>
-<section id="mapa-con-el-cluster-completo-k-4" class="slide level2">
-<h2>Mapa con el cluster completo k = 4</h2>
+<section id="mapa-respecto-a-la-variable-nivel_hdi-1" class="slide level2 center">
+<h2>Mapa respecto a la variable nivel_HDI</h2>
 
-<img data-src="km_cluster_k4.png" style="width:50.0%" class="r-stretch"></section>
-<section id="mapa-con-el-cluster-completo-k-5" class="slide level2">
-<h2>Mapa con el cluster completo k = 5</h2>
-
-<img data-src="hc_complete_k5.png" style="width:50.0%" class="r-stretch"></section>
-<section id="mapa-respecto-a-la-variable-hdi" class="slide level2">
-<h2>Mapa respecto a la variable HDI</h2>
-
-<img data-src="hdi_graph.png" style="width:50.0%" class="r-stretch"><p>Notemos como los gráficos anteriores se parecen mucho al mapa respecto a la variable HDI level. Parece que el cluster realizado es significativo.</p>
+<img data-src="hdi_graph.png" style="width:50.0%" class="r-stretch"></section>
+<section id="conclusiones" class="slide level2 center">
+<h2>Conclusiones</h2>
 <div class="footer footer-default">
 
 </div>
@@ -507,13 +504,13 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
+'smaller': true,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'smaller': false,
+'smaller': true,
  
         // Display controls in the bottom right corner
         controls: false,
@@ -562,7 +559,7 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
         disableLayout: false,
 
         // Vertical centering of slides
-        center: false,
+        center: true,
 
         // Enables touch navigation on devices with touch input
         touch: true,

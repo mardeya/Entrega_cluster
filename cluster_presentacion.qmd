@@ -10,18 +10,22 @@ author:
   - Toni Fuentes Bauzà
 format: 
   revealjs:
+    smaller: TRUE
     transition: convex
     background-transition: fade
+    css: style.css
+    center: TRUE
 editor: source
 ---
 
 ## Resumen del problema
 
-Recordemos que los datos cuantitativos de nuestro dataframe son medidas, tomadas en el 2021, del desarrollo y contaminación de la mayoría de países del mundo, así como de su población.
+Los datos cuantitativos de nuestro dataframe son medidas, tomadas en el 2021, del desarrollo y contaminación de la mayoría de países del mundo, así como de su población. Nuestro objetivo era encontrar relaciones entre los indicadores sociales, econónimos y ambientales de los diferentes países de nuestro planeta.
 
-::: {style="text-align:center;"}
-![](imagen2.jpg){width="50%"}
-:::
+```{r, echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics("imagen2.jpg")
+```
+
 
 ## Recordatorio de las variables
 
@@ -98,6 +102,10 @@ fviz_pca_biplot(qual.acp, repel = TRUE,
 
 Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación). Son los números 79 y 33.
 
+## Mapa respecto a la variable nivel_HDI
+
+![](hdi_graph.png){width="50%"}
+
 ## Clustering
 En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 3, como indica el siguiente gráfico:
 
@@ -122,7 +130,7 @@ fviz_cluster(km_clusters, qual, show.clust.cent = TRUE, ellipse.type = "manhatta
 Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1.
 
 ## K-medoid clustering
-Utilizaremos 3 clusters.
+Utilizaremos 3 clusters con la distancia de Manhattan.
 ```{r}
 library(cluster)
 set.seed(123)
@@ -145,7 +153,7 @@ cor(x = mat_dist, cophenetic(hc_average))
 cor(x = mat_dist, cophenetic(hc_ward))
 ```
 
-En este caso, el método \textit{linkage average} representa mejor la similitud entre observaciones.
+En este caso, el método linkage average representa mejor la similitud entre observaciones.
 ```{r}
 hc_completo <- qual %>%  dist(method = "euclidean") %>%  hclust(method = "complete")
 
@@ -218,20 +226,12 @@ generate_map <- function (cluster) {
 #generate_map(cutree(hc_complete,k=4))
 
 ```
-## Mapa con el cluster completo k = 4
-
-![](km_cluster_k4.png){width="50%"}
-
-## Mapa con el cluster completo k = 5
-
-![](hc_complete_k5.png){width="50%"}
 
 
-## Mapa respecto a la variable HDI
+## Mapa respecto a la variable nivel_HDI
 
 ![](hdi_graph.png){width="50%"}
 
-Notemos como los gráficos anteriores se parecen mucho al mapa respecto a la variable HDI level.
-Parece que el cluster realizado es significativo.
+
 
 ## Conclusiones
