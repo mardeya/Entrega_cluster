@@ -233,3 +233,5 @@ generate_map <- function (cluster) {
 
 Notemos como los gráficos anteriores se parecen mucho al mapa respecto a la variable HDI level.
 Parece que el cluster realizado es significativo.
+
+## Conclusiones
