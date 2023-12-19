@@ -50,6 +50,7 @@ str(db)
 
 ## Análisis de Componentes Principales
 Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares.
+
 ```{r, echo = FALSE, results=FALSE}
 library(tidyverse)
 library(factoextra)
@@ -58,9 +59,12 @@ qual <- db %>% select(6:10) %>%  drop_na %>% scale
 qual.acp <- prcomp(qual)
 qual.acp %>% fviz_eig(addlabels=TRUE, ylim=c(0,100))
 ```
-Observamos que con dos variables representamos un 80% de la varianza total. Realizaremos, pues, un ACP de dos componentes. Veamos cómo quedan representadas nuestras variables. 
+
 
 ## Análisis de Componentes Principales
+
+Observamos que con dos variables representamos un 80% de la varianza total. Realizaremos, pues, un ACP de dos componentes.
+
 ```{r}
 qual.acp %>% fviz_pca_var(col.var="contrib", gradient.cols=c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)
 ```
@@ -70,9 +74,9 @@ Tiene sentido que queden así ya que todas las variables tienen correlaciones po
 ```{r}
 qual %>% cor()
 ```
-Veamos qué tan buena es la representación:
 
 ## Análisis de componentes principales
+Veamos qué tan buena es la representación:
 
 ```{r}
 getpca <- qual.acp %>% get_pca_var()
@@ -92,35 +96,46 @@ fviz_pca_biplot(qual.acp, repel = TRUE,
 ```
 
 
-Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación)
-.Son los números 79 y 33.
+Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación). Son los números 79 y 33.
 
 ## Clustering
-En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 4, como indica el siguiente gráfico:
+En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 3, como indica el siguiente gráfico:
 
 ```{r}
-fviz_nbclust(qual, FUNcluster = kmeans, method ="wss", diss = dist(qual, method = "euclidian"))
+fviz_nbclust(qual, FUNcluster = kmeans, method ="wss", diss = dist(qual, method = "manhattan"))
 ```
 
-Por simplicidad, utilizaremos 4 clusters en lo que resta de análisis.
 
 ## K-medias clustering
 Realizaremos primero un clustering K-means:
 ```{r,warnings=FALSE}
 set.seed(101)
-km_clusters <- kmeans(qual, centers = 4, nstart = 25)
+km_clusters <- kmeans(qual, centers = 3, nstart = 25)
 
-fviz_cluster(km_clusters, qual, show.clust.cent = TRUE, ellipse.type = "euclid", star.plot = TRUE, repel = TRUE, geom = "point") + 
+fviz_cluster(km_clusters, qual, show.clust.cent = TRUE, ellipse.type = "manhattan", star.plot = TRUE, repel = TRUE, geom = "point") + 
   theme_bw() + 
   theme(legend.position = "none")
 ```
 
-Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1. Veamos otros tipos de clustering:
+## K-medias clustering
 
-## Dendograma
+Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1.
+
+## K-medoid clustering
+Utilizaremos 3 clusters.
+```{r}
+library(cluster)
+set.seed(123)
+pam_clusters <- pam(qual, k=3, metric = "manhattan")
+fviz_cluster(pam_clusters, datos, ellipse.type = "t", repel = TRUE) +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+## Dendogramas
 
 ```{r, results= FALSE}
-mat_dist <- dist(qual, method = "euclidian")  # Distancia euclidíana
+mat_dist <- dist(qual, method = "manhattan")  # Distancia euclidíana
 
 hc_complete <- hclust(d = mat_dist, method = "complete")
 hc_average <- hclust(d = mat_dist, method = "average")

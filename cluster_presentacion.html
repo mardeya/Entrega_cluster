@@ -388,12 +388,12 @@ Toni Fuentes Bauzà
 </section>
 <section id="análisis-de-componentes-principales" class="slide level2">
 <h2>Análisis de Componentes Principales</h2>
-<p>Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares. ::: {style=“text-align:center;”}</p>
+<p>Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares.</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"><p>::: Observamos que con dos variables representamos un 80% de la varianza total. Realizaremos, pues, un ACP de dos componentes. Veamos cómo quedan representadas nuestras variables.</p>
-</section>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
 <section id="análisis-de-componentes-principales-1" class="slide level2">
 <h2>Análisis de Componentes Principales</h2>
+<p>Observamos que con dos variables representamos un 80% de la varianza total. Realizaremos, pues, un ACP de dos componentes.</p>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
 <section id="análisis-de-componentes-principales-2" class="slide level2">
@@ -409,10 +409,10 @@ Life_expect  0.90574924 0.457364600  0.73284903 1.000000000  0.004751664
 Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code></pre>
 </div>
 </div>
-<p>Veamos qué tan buena es la representación:</p>
 </section>
 <section id="análisis-de-componentes-principales-3" class="slide level2">
 <h2>Análisis de componentes principales</h2>
+<p>Veamos qué tan buena es la representación:</p>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"><p>Todas las variables quedan bien representadas, salvo quizás la producción de <span class="math inline">\(CO_2\)</span>, pero tampoco llega a ser mala su representación.</p>
 </section>
@@ -420,33 +420,40 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 <h2>Análisis de Componentes Principales</h2>
 <p>Finalmente, grafiquemos nuestro ACP:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><p>Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación) .Son los números 79 y 33.</p>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><p>Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación). Son los números 79 y 33.</p>
 </section>
 <section id="clustering" class="slide level2">
 <h2>Clustering</h2>
-<p>En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 4, como indica el siguiente gráfico:</p>
+<p>En primer lugar, determinaremos el número de clusters a utilizar. Si hiciésemos un K-means, el número óptimo sería 3, como indica el siguiente gráfico:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><p>Por simplicidad, utilizaremos 4 clusters en lo que resta de análisis.</p>
-</section>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
 <section id="k-medias-clustering" class="slide level2">
 <h2>K-medias clustering</h2>
 <p>Realizaremos primero un clustering K-means:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"><p>Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1. Veamos otros tipos de clustering:</p>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
+<section id="k-medias-clustering-1" class="slide level2">
+<h2>K-medias clustering</h2>
+<p>Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1.</p>
 </section>
-<section id="dendograma" class="slide level2">
-<h2>Dendograma</h2>
-<p>En este caso, el método representa mejor la similitud entre observaciones.</p>
+<section id="k-medoid-clustering" class="slide level2">
+<h2>K-medoid clustering</h2>
+<p>Utilizaremos 3 clusters.</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
 <section id="dendogramas" class="slide level2">
 <h2>Dendogramas</h2>
+<p>En este caso, el método representa mejor la similitud entre observaciones.</p>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
 <section id="dendogramas-1" class="slide level2">
 <h2>Dendogramas</h2>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<section id="dendogramas-2" class="slide level2">
+<h2>Dendogramas</h2>
+
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="conclusiones-de-los-dendogramas" class="slide level2">
 <h2>Conclusiones de los dendogramas</h2>
 <ul>
