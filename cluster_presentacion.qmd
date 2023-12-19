@@ -15,24 +15,45 @@ format:
 editor: source
 ---
 
+## Resumen del problema
+
 Recordemos que los datos cuantitativos de nuestro dataframe son medidas, tomadas en el 2021, del desarrollo y contaminación de la mayoría de países del mundo, así como de su población.
 
-Repositorio: https://github.com/mardeya/Entrega_cluster
+::: {style="text-align:center;"}
+![](imagen2.jpg){width="50%"}
+:::
 
-![](imagen2.jpg){width="30%"}
+## Recordatorio de las variables
 
-## Análisis de Componentes Principales
-Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares.
-
-```{r, echo = FALSE, results=FALSE}
+```{r, echo = FALSE}
 library(tidyverse)
-library(factoextra)
-library(ggpubr)
 db = read.csv("dataset_tidy.csv") 
 db <- db %>% 
   mutate(HDI_level = factor(HDI_level, ordered = T, 
                             levels = c("Low", "Medium", "High", "Very High")), 
          Continent = factor(Continent))
+
+str(db)
+```
+
+-   2 variables ordinales: *HDI_rank*, *HDI_level*.
+-   2 variables nominales: *Country*, *Continent*.
+-   5 variables cuantitativas: *HDI*, *CO2_prod*, *GNIPC*, *Life_expect*, *Population*.
+
+
+## ¿A qué conclusiones llegamos?
+
+- Diferencias entre distintos continentes.
+- Asociación positiva entre las variables *GNIPC* y *Life_expect*.
+- Cierta asociación positiva pero correlación baja entre *CO2_prod* y *Life_expect*.
+
+
+## Análisis de Componentes Principales
+Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los datos porque las unidades de medida son muy dispares.
+```{r, echo = FALSE, results=FALSE}
+library(tidyverse)
+library(factoextra)
+library(ggpubr)
 qual <- db %>% select(6:10) %>%  drop_na %>% scale
 qual.acp <- prcomp(qual)
 qual.acp %>% fviz_eig(addlabels=TRUE, ylim=c(0,100))
