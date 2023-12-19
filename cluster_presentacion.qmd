@@ -59,6 +59,7 @@ Empezaremos haciendo un ACP de las variables cuantitativas. Debemos escalar los 
 library(tidyverse)
 library(factoextra)
 library(ggpubr)
+rownames(db) = db$Country
 qual <- db %>% select(6:10) %>%  drop_na %>% scale
 qual.acp <- prcomp(qual)
 qual.acp %>% fviz_eig(addlabels=TRUE, ylim=c(0,100))
@@ -96,11 +97,11 @@ Finalmente, grafiquemos nuestro ACP:
 fviz_pca_biplot(qual.acp, repel = TRUE,
                 col.var = "#2E9FDF", # color para las variables
                 col.ind = "#696969"  # color para las observaciones
-                )
+                , geom = "point")
 ```
 
 
-Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación). Son los números 79 y 33.
+Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación)
 
 ## Mapa respecto a la variable nivel_HDI
 
@@ -129,63 +130,12 @@ fviz_cluster(km_clusters, qual, show.clust.cent = TRUE, ellipse.type = "manhatta
 
 Observamos dos outliers, que corresponden a China y la India (países superpoblados). El resto de los países quedan bastante bien clasificados respecto a la CP1.
 
-## K-medoid clustering
-Utilizaremos 3 clusters con la distancia de Manhattan.
-```{r}
-library(cluster)
-set.seed(123)
-pam_clusters <- pam(qual, k=3, metric = "manhattan")
-fviz_cluster(pam_clusters, datos, ellipse.type = "t", repel = TRUE) +
-  theme_bw() +
-  theme(legend.position = "none")
-```
+## K-medias clustering
 
-## Dendogramas
-
-```{r, results= FALSE}
-mat_dist <- dist(qual, method = "manhattan")  # Distancia euclidíana
-
-hc_complete <- hclust(d = mat_dist, method = "complete")
-hc_average <- hclust(d = mat_dist, method = "average")
-hc_ward <- hclust(d = mat_dist, method = "ward.D")
-cor(x = mat_dist, cophenetic(hc_complete))
-cor(x = mat_dist, cophenetic(hc_average))
-cor(x = mat_dist, cophenetic(hc_ward))
-```
-
-En este caso, el método linkage average representa mejor la similitud entre observaciones.
-```{r}
-hc_completo <- qual %>%  dist(method = "euclidean") %>%  hclust(method = "complete")
-
-dend_complete <- fviz_dend(x= hc_complete, k = 4, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage completo",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5, linetype="dashed")
-dend_average <- fviz_dend(x= hc_average, k = 4, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage medias",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5,linetype="dashed")
-dend_ward <- fviz_dend(x= hc_ward, k = 4, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage ward",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5,linetype="dashed")
-layout(matrix(c(1,2,3), nrow = 1, byrow = TRUE))
-dend_average 
-```
-## Dendogramas
 
 ```{r}
-dend_complete
-```
-
-## Dendogramas
-
-```{r}
-dend_ward
-```
-
-## Conclusiones de los dendogramas
-
-- En los tipos $average$ y $complete$, China y la India quedan en un cluster separado.
-- En el cluser $ward$ quedan cuatro clusters bien diferenciados con, más o menos, el mismo número de países.
-
-## Visualización de clusterizados
-
-Finalmente, visualizaremos los diferentes tipos de clusters realizados mediante un mapa mundi. En todos los mapas, los resultados marcados en gris se tratan de países que tenían algún
-valor registrado como NA.
-
-```{r}
+library(factoextra)
+library(leaflet)
 # Utilizaremos la siguiente funcion.
 generate_map <- function (cluster) {
   world_map <- map_data("world")
@@ -223,15 +173,117 @@ generate_map <- function (cluster) {
 # Pes clustering jerarquitzat posar
 #   generate_map(cutree(hc, k=5))
 
-#generate_map(cutree(hc_complete,k=4))
-
 ```
 
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(km_clusters$cluster)
+knitr::include_graphics("hdi_graph.png")
+```
 
-## Mapa respecto a la variable nivel_HDI
+## K-medias clustering con k=5
+```{r,warnings=FALSE}
+set.seed(101)
+km_clusters <- kmeans(qual, centers = 5, nstart = 25)
+```
 
-![](hdi_graph.png){width="50%"}
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(km_clusters$cluster)
+knitr::include_graphics("hdi_graph.png")
+```
+
+## K-medoid clustering
+Utilizaremos 3 clusters con la distancia de Manhattan.
+```{r}
+library(cluster)
+set.seed(123)
+pam_clusters <- pam(qual, k=3, metric = "manhattan")
+fviz_cluster(pam_clusters, datos, ellipse.type = "t", repel = TRUE, geom = "point") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+## K-medoid clustering
+
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(pam_clusters$cluster)
+knitr::include_graphics("hdi_graph.png")
+```
+## K-medoid clustering con k = 5
+
+```{r}
+library(cluster)
+set.seed(123)
+pam_clusters <- pam(qual, k=5, metric = "manhattan")
+```
+
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(pam_clusters$cluster)
+knitr::include_graphics("hdi_graph.png")
+```
+
+## Dendogramas
+
+```{r, echo = TRUE}
+mat_dist <- dist(qual, method = "manhattan")  # Distancia euclidíana
+
+hc_complete <- hclust(d = mat_dist, method = "complete")
+hc_average <- hclust(d = mat_dist, method = "average")
+hc_ward <- hclust(d = mat_dist, method = "ward.D")
+cor(x = mat_dist, cophenetic(hc_complete))
+cor(x = mat_dist, cophenetic(hc_average))
+cor(x = mat_dist, cophenetic(hc_ward))
+```
+## Dendogramas
+En este caso, el método linkage average representa mejor la similitud entre observaciones.
+```{r}
+hc_completo <- qual %>%  dist(method = "manhattan") %>%  hclust(method = "complete")
+
+dend_complete <- fviz_dend(x= hc_complete, k = 5, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage completo",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5, linetype="dashed")
+dend_average <- fviz_dend(x= hc_average, k = 5, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage medias",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5,linetype="dashed")
+dend_ward <- fviz_dend(x= hc_ward, k = 5, cex = 0.6,show_labels=FALSE,main="Dendograma: Linkage ward",ylab="Altura",xlab="Países") +geom_line(yintercept=5.5,linetype="dashed")
+layout(matrix(c(1,2,3), nrow = 1, byrow = TRUE))
+dend_average 
+```
+
+## Dendogramas
+
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(cutree(hc_average, k = 5))
+knitr::include_graphics("hdi_graph.png")
+```
+## Dendogramas
+
+```{r}
+dend_complete
+```
+## Dendogramas
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(cutree(hc_completo, k = 5))
+knitr::include_graphics("hdi_graph.png")
+```
+## Dendogramas
+
+```{r}
+dend_ward
+```
+
+## Dendogramas
+
+```{r, echo=FALSE, out.width='50%', fig.align='center'}
+layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
+generate_map(cutree(hc_ward, k = 5))
+knitr::include_graphics("hdi_graph.png")
+```
+
+## Conclusiones de los dendogramas
+
+- En los tipos $average$ y $complete$, China y la India quedan en un cluster separado.
+- En el cluser $ward$ quedan cuatro clusters bien diferenciados con, más o menos, el mismo número de países.
 
 
-
-## Conclusiones
+## Conclusiones finales
