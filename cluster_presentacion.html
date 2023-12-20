@@ -484,7 +484,7 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 <h2>Análisis de Componentes Principales</h2>
 <p>Finalmente, grafiquemos nuestro ACP:</p>
 
-<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><p>Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación)</p>
+<img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><p>Cabe destacar que tanto China como la India son outliers por población. (Superpoblación)</p>
 </section>
 <section id="mapa-respecto-a-la-variable-nivel_hdi" class="slide level2 center">
 <h2>Mapa respecto a la variable nivel_HDI</h2>
@@ -588,7 +588,7 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 <section id="dendogramas" class="slide level2 center">
 <h2>Dendogramas</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>mat_dist <span class="ot">&lt;-</span> <span class="fu">dist</span>(qual, <span class="at">method =</span> <span class="st">"manhattan"</span>)  <span class="co"># Distancia euclidíana</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>mat_dist <span class="ot">&lt;-</span> <span class="fu">dist</span>(qual, <span class="at">method =</span> <span class="st">"manhattan"</span>)  <span class="co"># Distancia de manhattan</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a>hc_complete <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="at">d =</span> mat_dist, <span class="at">method =</span> <span class="st">"complete"</span>)</span>
 <span id="cb3-4"><a href="#cb3-4"></a>hc_average <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="at">d =</span> mat_dist, <span class="at">method =</span> <span class="st">"average"</span>)</span>
@@ -607,13 +607,13 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 </div>
 </div>
 </section>
-<section id="dendogramas-1" class="slide level2 center">
-<h2>Dendogramas</h2>
+<section id="linkage-average" class="slide level2 center">
+<h2>Linkage average</h2>
 <p>En este caso, el método linkage average representa mejor la similitud entre observaciones.</p>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
-<section id="dendogramas-2" class="slide level2 center">
-<h2>Dendogramas</h2>
+<section id="linkage-average-1" class="slide level2 center">
+<h2>Linkage average</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -631,12 +631,12 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 </div>
 </div>
 </section>
-<section id="dendogramas-3" class="slide level2 center">
-<h2>Dendogramas</h2>
+<section id="linkage-complete" class="slide level2 center">
+<h2>Linkage complete</h2>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
-<section id="dendogramas-4" class="slide level2 center">
-<h2>Dendogramas</h2>
+<section id="linkage-complete-1" class="slide level2 center">
+<h2>Linkage complete</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -654,12 +654,12 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 </div>
 </div>
 </section>
-<section id="dendogramas-5" class="slide level2 center">
-<h2>Dendogramas</h2>
+<section id="linkage-ward" class="slide level2 center">
+<h2>Linkage ward</h2>
 
 <img data-src="cluster_presentacion_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
-<section id="dendogramas-6" class="slide level2 center">
-<h2>Dendogramas</h2>
+<section id="linkage-ward-1" class="slide level2 center">
+<h2>Linkage ward</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -681,11 +681,19 @@ Population  -0.01782666 0.005138611 -0.04173554 0.004751664  1.000000000</code><
 <h2>Conclusiones de los dendogramas</h2>
 <ul>
 <li>En los tipos <span class="math inline">\(average\)</span> y <span class="math inline">\(complete\)</span>, China y la India quedan en un cluster separado.</li>
-<li>En el cluser <span class="math inline">\(ward\)</span> quedan cuatro clusters bien diferenciados con, más o menos, el mismo número de países.</li>
+<li>El cluster <span class="math inline">\(average\)</span> no clasifica demasiado bien.</li>
+<li>El mejor linkage es <span class="math inline">\(ward\)</span>, en el que quedan otros cuatro clusters bien diferenciados con, más o menos, el mismo número de países.</li>
 </ul>
 </section>
 <section id="conclusiones-finales" class="slide level2 center">
 <h2>Conclusiones finales</h2>
+<ul>
+<li>Clusters aglomerativos (K-means, K-medoids) obtienen muy buenos resultados; similares.</li>
+<li>Excepto con el linkage <span class="math inline">\(average\)</span>, se obtienen clusterings parecidos a los de <span class="math inline">\(HDI_level\)</span>.</li>
+<li>Conclusión: <span class="math inline">\(HDI_index\)</span> explica bien las demás variables cuantitativas.</li>
+<li>Outliers en cuanto a población: China e India.</li>
+<li>Estudios futuros: repetir el estudio eliminando o compensando la variable&nbsp;de&nbsp;población.</li>
+</ul>
 <div class="footer footer-default">
 
 </div>

@@ -101,7 +101,7 @@ fviz_pca_biplot(qual.acp, repel = TRUE,
 ```
 
 
-Cabe destacar que tanto China como la India son outliers por poblacion. (Superpoblación)
+Cabe destacar que tanto China como la India son outliers por población. (Superpoblación)
 
 ## Mapa respecto a la variable nivel_HDI
 
@@ -227,7 +227,7 @@ knitr::include_graphics("hdi_graph.png")
 ## Dendogramas
 
 ```{r, echo = TRUE}
-mat_dist <- dist(qual, method = "manhattan")  # Distancia euclidíana
+mat_dist <- dist(qual, method = "manhattan")  # Distancia de manhattan
 
 hc_complete <- hclust(d = mat_dist, method = "complete")
 hc_average <- hclust(d = mat_dist, method = "average")
@@ -236,7 +236,7 @@ cor(x = mat_dist, cophenetic(hc_complete))
 cor(x = mat_dist, cophenetic(hc_average))
 cor(x = mat_dist, cophenetic(hc_ward))
 ```
-## Dendogramas
+## Linkage average
 En este caso, el método linkage average representa mejor la similitud entre observaciones.
 ```{r}
 hc_completo <- qual %>%  dist(method = "manhattan") %>%  hclust(method = "complete")
@@ -248,31 +248,31 @@ layout(matrix(c(1,2,3), nrow = 1, byrow = TRUE))
 dend_average 
 ```
 
-## Dendogramas
+## Linkage average
 
 ```{r, echo=FALSE, out.width='50%', fig.align='center'}
 layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
 generate_map(cutree(hc_average, k = 5))
 knitr::include_graphics("hdi_graph.png")
 ```
-## Dendogramas
+## Linkage complete
 
 ```{r}
 dend_complete
 ```
-## Dendogramas
+## Linkage complete
 ```{r, echo=FALSE, out.width='50%', fig.align='center'}
 layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
 generate_map(cutree(hc_completo, k = 5))
 knitr::include_graphics("hdi_graph.png")
 ```
-## Dendogramas
+## Linkage ward
 
 ```{r}
 dend_ward
 ```
 
-## Dendogramas
+## Linkage ward
 
 ```{r, echo=FALSE, out.width='50%', fig.align='center'}
 layout(matrix(c(1,2), nrow = 1, byrow = TRUE))
@@ -283,7 +283,12 @@ knitr::include_graphics("hdi_graph.png")
 ## Conclusiones de los dendogramas
 
 - En los tipos $average$ y $complete$, China y la India quedan en un cluster separado.
-- En el cluser $ward$ quedan cuatro clusters bien diferenciados con, más o menos, el mismo número de países.
-
+- El cluster $average$ no clasifica demasiado bien.
+- El mejor linkage es $ward$, en el que quedan otros cuatro clusters bien diferenciados con, más o menos, el mismo número de países.
 
 ## Conclusiones finales
+- Clusters aglomerativos (K-means, K-medoids) obtienen muy buenos resultados; similares.
+- Excepto con el linkage $average$, se obtienen clusterings parecidos a los de $HDI_level$.
+- Conclusión: $HDI_index$ explica bien las demás variables cuantitativas.
+- Outliers en cuanto a población: China e India.
+- Estudios futuros: repetir el estudio eliminando o compensando la variable de población.
