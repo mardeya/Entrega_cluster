@@ -288,7 +288,7 @@ knitr::include_graphics("hdi_graph.png")
 
 ## Conclusiones finales
 - Clusters aglomerativos (K-means, K-medoids) obtienen muy buenos resultados; similares.
-- Excepto con el linkage $average$, se obtienen clusterings parecidos a los de $HDI_level$.
+- Excepto con el linkage $average$, se obtienen clusterings parecidos a los de $HDI\_level$.
 - Conclusión: $HDI\_index$ explica bien las demás variables cuantitativas.
 - Outliers en cuanto a población: China e India.
 - Estudios futuros: repetir el estudio eliminando o compensando la variable de población.
